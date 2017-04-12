@@ -20,12 +20,26 @@
             android:layout_height="wrap_content"
             tools:text="1+1=?"/>
 
-        <TextView
-            android:id="@+id/answerNumContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            tools:text="100"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/answerNumContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="100"/>
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/createDateContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="222"/>
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 

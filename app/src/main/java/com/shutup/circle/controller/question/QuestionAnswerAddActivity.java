@@ -16,6 +16,8 @@ import com.shutup.circle.model.request.QuestionAnswerCreateRequest;
 import com.shutup.circle.model.response.LoginUserResponse;
 import com.shutup.circle.model.response.RestInfo;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import butterknife.ButterKnife;
@@ -73,7 +75,7 @@ public class QuestionAnswerAddActivity extends BaseActivity {
     @OnClick(R.id.addBtn)
     public void onClick() {
         if (checkContentNotEmpty() && checkQuestionNotNull()) {
-            Realm realm = Realm.getDefaultInstance();
+            final Realm realm = Realm.getDefaultInstance();
             LoginUserResponse loginUserResponse = realm.where(LoginUserResponse.class).findFirst();
             Call<ResponseBody> call = getCircleApi().questionAnswerAdd(questionId,
                     loginUserResponse.getToken(),
@@ -86,11 +88,10 @@ public class QuestionAnswerAddActivity extends BaseActivity {
                     if (response.isSuccessful()) {
                         try {
                             Question question = gson.fromJson(response.body().string(),Question.class);
-                            Realm realm = Realm.getDefaultInstance();
+                            EventBus.getDefault().postSticky(question);
                             realm.beginTransaction();
                             realm.insertOrUpdate(question);
                             realm.commitTransaction();
-
                             refreshUI();
                             finish();
                         } catch (IOException e) {

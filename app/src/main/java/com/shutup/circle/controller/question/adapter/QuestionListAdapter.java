@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shutup.circle.R;
+import com.shutup.circle.common.DateUtils;
 import com.shutup.circle.model.persis.Question;
 
 import butterknife.ButterKnife;
@@ -19,7 +20,6 @@ import io.realm.RealmList;
  */
 
 public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapter.MyViewHolder> {
-
     private Context mContext;
     private RealmList<Question> mQuestions;
 
@@ -36,13 +36,13 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final int pos = position;
         Question question = mQuestions.get(position);
         if (!question.isValid()) {
             return;
         }
         holder.mQuestionContent.setText(question.getQuestion());
-        holder.mAnswerNumContent.setText(question.getAnswers().size()+ mContext.getString(R.string.answerNumTitle));
+        holder.mAnswerNumContent.setText(question.getAnswers().size() + mContext.getString(R.string.answerNumTitle));
+        holder.mCreateDateContent.setText(DateUtils.formatDate(question.getCreatedAt()));
 
     }
 
@@ -66,6 +66,8 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         TextView mQuestionContent;
         @InjectView(R.id.answerNumContent)
         TextView mAnswerNumContent;
+        @InjectView(R.id.createDateContent)
+        TextView mCreateDateContent;
 
         MyViewHolder(View view) {
             super(view);

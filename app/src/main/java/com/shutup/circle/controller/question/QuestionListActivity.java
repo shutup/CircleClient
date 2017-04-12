@@ -11,17 +11,25 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shutup.circle.BuildConfig;
-import com.shutup.circle.controller.question.adapter.QuestionListAdapter;
 import com.shutup.circle.R;
+import com.shutup.circle.common.EndlessRecyclerViewScrollListener;
 import com.shutup.circle.common.RecyclerTouchListener;
 import com.shutup.circle.controller.BaseActivity;
+import com.shutup.circle.controller.question.adapter.QuestionListAdapter;
 import com.shutup.circle.model.persis.Question;
+import com.shutup.circle.model.response.LoginUserResponse;
+import com.shutup.circle.model.response.QuestionListResponse;
+import com.shutup.circle.model.response.RestInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,6 +38,11 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuestionListActivity extends BaseActivity {
 
@@ -45,6 +58,7 @@ public class QuestionListActivity extends BaseActivity {
     FloatingActionButton mAddQuestionFAB;
 
     private QuestionListAdapter mQuestionListAdapter;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private RealmList<Question> mQuestions;
     private Realm mRealm;
 
@@ -60,20 +74,19 @@ public class QuestionListActivity extends BaseActivity {
         initRecyclerView();
         initSwipeRefreshEvent();
         loadLocalData();
+        loadServerData(0);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        if (BuildConfig.DEBUG) Log.d("QuestionListActivity", "onStart");
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-        if (BuildConfig.DEBUG) Log.d("QuestionListActivity", "onStop");
     }
 
     @OnClick(R.id.addQuestionFAB)
@@ -97,7 +110,15 @@ public class QuestionListActivity extends BaseActivity {
     private void initRecyclerView() {
         mQuestions = new RealmList<>();
         mQuestionListAdapter = new QuestionListAdapter(this, mQuestions);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadServerData(page);
+            }
+        };
+        mRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
         mRecyclerView.setAdapter(mQuestionListAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -116,7 +137,7 @@ public class QuestionListActivity extends BaseActivity {
     }
 
     private void loadLocalData() {
-        final RealmResults<Question> questions = mRealm.where(Question.class).findAllSortedAsync("createdAt");
+        final RealmResults<Question> questions = mRealm.where(Question.class).findAllSortedAsync("createdAt", Sort.DESCENDING);
         questions.addChangeListener(new RealmChangeListener<RealmResults<Question>>() {
             @Override
             public void onChange(RealmResults<Question> elements) {
@@ -130,11 +151,62 @@ public class QuestionListActivity extends BaseActivity {
         });
     }
 
+    private void loadServerData(int page) {
+        LoginUserResponse loginUserResponse = mRealm.where(LoginUserResponse.class).findFirst();
+
+        Call<ResponseBody> call = getCircleApi().questionTotalList(page,loginUserResponse.getToken());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Gson gson = getGson();
+                if (response.isSuccessful()) {
+                    try {
+                        QuestionListResponse questionListResponse = gson.fromJson(response.body().string(),QuestionListResponse.class);
+                        if (questionListResponse.isLast()) {
+                            Toast.makeText(QuestionListActivity.this, "已经到底啦！", Toast.LENGTH_SHORT).show();
+                        }
+                        mQuestions.addAll(questionListResponse.getContent());
+                        mQuestionListAdapter.notifyDataSetChanged();
+                        mSwipeRefresh.setRefreshing(false);
+
+                        mRealm.beginTransaction();
+                        mRealm.insertOrUpdate(questionListResponse.getContent());
+                        mRealm.commitTransaction();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    RestInfo info = null;
+                    try {
+                        info = gson.fromJson(response.errorBody().string(), RestInfo.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (info != null) {
+                        Toast.makeText(QuestionListActivity.this, info.getMsg(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(QuestionListActivity.this, "请求异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void initSwipeRefreshEvent() {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadLocalData();
+                mQuestions.clear();
+                mQuestionListAdapter.setQuestions(mQuestions);
+                mQuestionListAdapter.notifyDataSetChanged();
+                mEndlessRecyclerViewScrollListener.resetState();
+                loadServerData(0);
             }
         });
     }

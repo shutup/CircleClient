@@ -106,7 +106,7 @@ public class CommentAddActivity extends BaseActivity {
         LoginUserResponse loginUserResponse = realm.where(LoginUserResponse.class).findFirst();
 
         if (isCommentReply() && checkContentNotEmpty() && checkParamsNotEmpty()) {
-            if (userId != -1 && userId == loginUserResponse.getId()) {
+            if (userId != -1 && userId.equals(loginUserResponse.getId())) {
                 processComment(questionId,answerId,loginUserResponse.getToken(),new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
             }else {
                 processCommentReply(questionId,answerId,commentId,loginUserResponse.getToken(),new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
