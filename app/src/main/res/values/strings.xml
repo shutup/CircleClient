@@ -7,4 +7,8 @@
     <string name="passwordConfirmHintStr">确认登录密码</string>
     <string name="loginActivityTitle">登录</string>
     <string name="registerActivityTitle">注册</string>
+
+    <string name="answerNumTitle">个回答</string>
+    <string name="questionAnswerTitle">问答</string>
+    <string name="addQuestionTitle">撰写提问</string>
 </resources>

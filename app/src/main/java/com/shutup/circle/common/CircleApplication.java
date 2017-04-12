@@ -1,7 +1,6 @@
 package com.shutup.circle.common;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
 
 import io.realm.Realm;
 

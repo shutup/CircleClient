@@ -9,6 +9,7 @@ import io.realm.annotations.PrimaryKey;
 public class LoginUserResponse extends RealmObject {
     @PrimaryKey
     private Long id;
+    private String username;
     private String token;
 
     public LoginUserResponse(){
@@ -26,6 +27,14 @@ public class LoginUserResponse extends RealmObject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getToken() {

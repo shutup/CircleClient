@@ -19,7 +19,7 @@ import com.shutup.circle.R;
 import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.RetrofitSingleton;
 import com.shutup.circle.controller.BaseActivity;
-import com.shutup.circle.controller.MainActivity;
+import com.shutup.circle.controller.question.QuestionListActivity;
 import com.shutup.circle.model.request.LoginUserRequest;
 import com.shutup.circle.model.response.LoginUserResponse;
 import com.shutup.circle.model.response.RestInfo;
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.loginBtn:
                 //just for test
-//                intent = new Intent(LoginActivity.this, MainActivity.class);
+//                intent = new Intent(LoginActivity.this, QuestionListActivity.class);
 //                startActivity(intent);
                 if (checkUserPhone()&& checkPassword()) {
                     Call<ResponseBody> call= mCircleApi.loginUser(new LoginUserRequest(mUserPhone.getEditableText().toString(),mPassword.getEditableText().toString()));
@@ -160,9 +160,9 @@ public class LoginActivity extends BaseActivity {
                                 }
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.beginTransaction();
-                                realm.copyToRealm(loginUserResponse);
+                                realm.insertOrUpdate(loginUserResponse);
                                 realm.commitTransaction();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, QuestionListActivity.class);
                                 startActivity(intent);
                                 finish();
                             }else {

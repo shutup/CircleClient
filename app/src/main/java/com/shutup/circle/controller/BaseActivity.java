@@ -3,24 +3,29 @@ package com.shutup.circle.controller;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.shutup.circle.common.CircleApi;
+import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.GsonSingleton;
 import com.shutup.circle.common.RetrofitSingleton;
 import com.shutup.circle.common.SystemBarTintManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
  * Created by shutup on 2016/12/14.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements Constants{
 
     private CircleApi mCircleApi;
     private Gson mGson;
@@ -32,6 +37,15 @@ public class BaseActivity extends AppCompatActivity {
         initGsonInstance();
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initStatusBar() {
@@ -79,5 +93,11 @@ public class BaseActivity extends AppCompatActivity {
 
     public Gson getGson() {
         return mGson;
+    }
+
+    protected void refreshUI() {
+        Message m = new Message();
+        m.what = 1;
+        EventBus.getDefault().postSticky(m);
     }
 }

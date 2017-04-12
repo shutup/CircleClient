@@ -10,7 +10,7 @@ import android.os.Message;
 import com.shutup.circle.R;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.controller.BaseActivity;
-import com.shutup.circle.controller.MainActivity;
+import com.shutup.circle.controller.question.QuestionListActivity;
 import com.shutup.circle.controller.login.LoginActivity;
 import com.shutup.circle.model.response.LoginUserResponse;
 
@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity implements Constants {
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, QuestionListActivity.class);
                     startActivity(intent);
                 }
                 finish();

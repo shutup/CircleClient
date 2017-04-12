@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.shutup.circle"
           xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".common.CircleApplication"
         android:allowBackup="true"
@@ -10,13 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".controller.login.LoginActivity">
-
         </activity>
         <activity android:name=".controller.login.RegisterActivity">
-
         </activity>
-        <activity android:name=".controller.MainActivity">
-
+        <activity android:name=".controller.question.QuestionListActivity">
         </activity>
         <activity android:name=".controller.splash.SplashActivity">
             <intent-filter>
@@ -24,6 +23,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".controller.question.QuestionAddActivity">
+        </activity>
+        <activity android:name=".controller.question.QuestionDetailActivity">
+        </activity>
+        <activity android:name=".controller.question.QuestionAnswerAddActivity">
+        </activity>
+        <activity android:name=".controller.question.CommentAddActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.AppCompat.Translucent">
         </activity>
     </application>
 

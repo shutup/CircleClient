@@ -8,8 +8,9 @@ public interface Constants {
     String BASE_URL = "http://shutups.lan:8080";
 //    String BASE_URL = "https://todo.fleetinglife.cn";
 
-    String ACTIVITY_STATUS = "ACTIVITY_STATUS";
-    int ACTIVITY_NORMAL = 1;
-    int ACTIVITY_EDIT = 2;
-
+    String QUESTION_ID = "QUESTION_ID";
+    String ANSWER_ID = "ANSWER_ID";
+    String COMMENT_ID = "COMMENT_ID";
+    String USER_ID = "USER_ID";
+    String HINT_STR = "HINT_STR";
 }
