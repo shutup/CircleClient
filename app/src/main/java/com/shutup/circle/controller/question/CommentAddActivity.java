@@ -77,7 +77,7 @@ public class CommentAddActivity extends BaseActivity {
                            }
                        },
                 100);
-//        mCommentContent.setHint(hintStr);
+        mCommentContent.setHint(hintStr);
         mCommentContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shutup.circle.R;
 import com.shutup.circle.common.Constants;
+import com.shutup.circle.common.DateUtils;
 import com.shutup.circle.controller.question.CommentAddActivity;
 import com.shutup.circle.model.persis.Answer;
 import com.shutup.circle.model.persis.Question;
@@ -27,7 +29,6 @@ import butterknife.InjectView;
  */
 
 public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnswerListAdapter.MyViewHolder> implements Constants {
-
     private Context mContext;
     private Question mQuestion;
 
@@ -50,14 +51,15 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
         }
 
         holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
-        holder.mUserPhoto.setText(answer.getUser().getUsername().toUpperCase().substring(0,1));
-        int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random())/2F});
+        holder.mUserPhoto.setText(answer.getUser().getUsername().toUpperCase().substring(0, 1));
+        int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
         GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
         gradientDrawable.setColor(color);
         holder.mUserName.setText(answer.getUser().getUsername());
+        holder.mCreateDateContent.setText(DateUtils.formatDate(answer.getCreatedAt()));
         holder.mAnswerContent.setText(answer.getAnswer());
-        holder.mAgreeBtn.setText(answer.getAgreedUsers().size() + "");
-        holder.mDisagreeBtn.setText(answer.getDisagreedUsers().size() + "");
+        holder.mAgreeNum.setText(answer.getAgreedUsers().size() + "");
+        holder.mDisagreeNum.setText(answer.getDisagreedUsers().size() + "");
 
         holder.mContentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,12 +90,18 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
         Button mUserPhoto;
         @InjectView(R.id.userName)
         TextView mUserName;
+        @InjectView(R.id.createDateContent)
+        TextView mCreateDateContent;
         @InjectView(R.id.answerContent)
         TextView mAnswerContent;
         @InjectView(R.id.agreeBtn)
-        Button mAgreeBtn;
+        ImageButton mAgreeBtn;
         @InjectView(R.id.disagreeBtn)
-        Button mDisagreeBtn;
+        ImageButton mDisagreeBtn;
+        @InjectView(R.id.agreeNum)
+        TextView mAgreeNum;
+        @InjectView(R.id.disagreeNum)
+        TextView mDisagreeNum;
         @InjectView(R.id.commentRecyclerView)
         RecyclerView mCommentRecyclerView;
 

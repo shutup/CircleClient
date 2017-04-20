@@ -1,5 +1,7 @@
 package com.shutup.circle.model.persis;
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -26,8 +28,8 @@ public class Comment extends RealmObject{
     private User user;
     private User replyUser;
     private boolean reply;
-    private long createdAt;
-    private long updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private RealmList<User> agreedUsers;
     private RealmList<User> disagreedUsers;
 
@@ -56,19 +58,19 @@ public class Comment extends RealmObject{
         this.user = user;
     }
 
-    public long getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public long getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(long updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

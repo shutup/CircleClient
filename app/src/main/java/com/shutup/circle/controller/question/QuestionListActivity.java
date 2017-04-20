@@ -165,7 +165,12 @@ public class QuestionListActivity extends BaseActivity {
                         if (questionListResponse.isLast()) {
                             Toast.makeText(QuestionListActivity.this, "已经到底啦！", Toast.LENGTH_SHORT).show();
                         }
-                        mQuestions.addAll(questionListResponse.getContent());
+                        if (questionListResponse.isFirst()) {
+                            mQuestions.clear();
+                            mQuestions.addAll(questionListResponse.getContent());
+                        }else {
+                            mQuestions.addAll(questionListResponse.getContent());
+                        }
                         mQuestionListAdapter.notifyDataSetChanged();
                         mSwipeRefresh.setRefreshing(false);
 
@@ -202,9 +207,9 @@ public class QuestionListActivity extends BaseActivity {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mQuestions.clear();
-                mQuestionListAdapter.setQuestions(mQuestions);
-                mQuestionListAdapter.notifyDataSetChanged();
+//                mQuestions.clear();
+//                mQuestionListAdapter.setQuestions(mQuestions);
+//                mQuestionListAdapter.notifyDataSetChanged();
                 mEndlessRecyclerViewScrollListener.resetState();
                 loadServerData(0);
             }
