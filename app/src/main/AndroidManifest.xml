@@ -30,9 +30,11 @@
         </activity>
         <activity android:name=".controller.question.QuestionAnswerAddActivity">
         </activity>
-        <activity android:name=".controller.question.CommentAddActivity"
+        <activity
+            android:name=".controller.question.CommentAddActivity"
+            android:theme="@style/Theme.AppCompat.Translucent"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.AppCompat.Translucent">
+            >
         </activity>
     </application>
 

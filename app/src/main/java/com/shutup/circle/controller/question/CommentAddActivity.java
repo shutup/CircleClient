@@ -44,8 +44,9 @@ public class CommentAddActivity extends BaseActivity {
     private int questionId;
     private int answerId;
     private int commentId;
-    private Long userId ;
+    private Long userId;
     private String hintStr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +60,8 @@ public class CommentAddActivity extends BaseActivity {
         Intent intent = getIntent();
         questionId = intent.getIntExtra(QUESTION_ID, -1);
         answerId = intent.getIntExtra(ANSWER_ID, -1);
-        commentId = intent.getIntExtra(COMMENT_ID,-1);
-        userId = intent.getLongExtra(USER_ID,-1);
+        commentId = intent.getIntExtra(COMMENT_ID, -1);
+        userId = intent.getLongExtra(USER_ID, -1);
         hintStr = intent.getStringExtra(HINT_STR);
     }
 
@@ -71,20 +72,19 @@ public class CommentAddActivity extends BaseActivity {
                            public void run() {
                                InputMethodManager inputManager =
                                        (InputMethodManager) mCommentContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                               inputManager.showSoftInput(mCommentContent, 0);
+                               mCommentContent.requestFocus();
+                               inputManager.showSoftInput(mCommentContent, InputMethodManager.SHOW_IMPLICIT);
                            }
                        },
-                500);
-        mCommentContent.setHint(hintStr);
+                100);
+//        mCommentContent.setHint(hintStr);
         mCommentContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -107,12 +107,12 @@ public class CommentAddActivity extends BaseActivity {
 
         if (isCommentReply() && checkContentNotEmpty() && checkParamsNotEmpty()) {
             if (userId != -1 && userId.equals(loginUserResponse.getId())) {
-                processComment(questionId,answerId,loginUserResponse.getToken(),new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
-            }else {
-                processCommentReply(questionId,answerId,commentId,loginUserResponse.getToken(),new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
+                processComment(questionId, answerId, loginUserResponse.getToken(), new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
+            } else {
+                processCommentReply(questionId, answerId, commentId, loginUserResponse.getToken(), new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
             }
-        }else if (checkContentNotEmpty() && checkParamsNotEmpty()) {
-            processComment(questionId,answerId,loginUserResponse.getToken(),new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
+        } else if (checkContentNotEmpty() && checkParamsNotEmpty()) {
+            processComment(questionId, answerId, loginUserResponse.getToken(), new QuestionAnswerCommentCreateRequest(mCommentContent.getText().toString().trim()));
 
         }
     }
@@ -123,7 +123,7 @@ public class CommentAddActivity extends BaseActivity {
                                      String token,
                                      QuestionAnswerCommentCreateRequest commentCreateRequest) {
         Call<ResponseBody> call = getCircleApi().questionAnswerCommentAddReply(questionId,
-                answerId,commentId,token,commentCreateRequest);
+                answerId, commentId, token, commentCreateRequest);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
