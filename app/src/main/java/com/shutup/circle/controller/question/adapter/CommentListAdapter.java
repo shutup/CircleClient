@@ -5,6 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.CharacterStyle;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +21,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.shutup.circle.BuildConfig;
 import com.shutup.circle.R;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.DateUtils;
@@ -62,7 +73,40 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
             gradientDrawable.setColor(color);
             holder.mUserName.setText(comment.getReplyUser().getUsername());
-            holder.mContent.setText(comment.getUser().getUsername() + " " + comment.getComment());
+            final String userName = comment.getUser().getUsername();
+            SpannableString usernameStr = new SpannableString(userName);
+            usernameStr.setSpan(new ForegroundColorSpan(Color.GREEN), 0, usernameStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            usernameStr.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View view) {
+                    if (BuildConfig.DEBUG) Log.d("CommentListAdapter", "view:" + view);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    ds.setUnderlineText(false);
+                }
+            }, 0, usernameStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            SpannableString commentStr = new SpannableString(comment.getComment());
+            commentStr.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, CommentAddActivity.class);
+                    intent.putExtra(QUESTION_ID, mQuestion.getId());
+                    intent.putExtra(ANSWER_ID, mAnswer.getId());
+                    intent.putExtra(COMMENT_ID, mAnswer.getComments().get(holder.getAdapterPosition()).getId());
+                    intent.putExtra(USER_ID, mAnswer.getComments().get(holder.getAdapterPosition()).getUser().getId());
+                    intent.putExtra(HINT_STR, "回复：" + mAnswer.getComments().get(holder.getAdapterPosition()).getUser().getUsername());
+                    mContext.startActivity(intent);
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    ds.setUnderlineText(false);
+                }
+
+            },0,commentStr.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.mContent.setMovementMethod(LinkMovementMethod.getInstance());
+            holder.mContent.setText(TextUtils.concat(new SpannableString("回复 "),usernameStr,new SpannableString(" : "), commentStr));
         } else {
             holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
             holder.mUserPhoto.setText(comment.getUser().getUsername().toUpperCase().substring(0, 1));

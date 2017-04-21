@@ -3,6 +3,7 @@ package com.shutup.circle.controller.question;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -60,7 +61,7 @@ public class QuestionAnswerAddActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("");
-            mToolbarTitle.setText(R.string.addQuestionTitle);
+            mToolbarTitle.setText(R.string.addAnswerTitle);
         }
     }
 

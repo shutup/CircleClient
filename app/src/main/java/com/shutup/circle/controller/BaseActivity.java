@@ -1,17 +1,23 @@
 package com.shutup.circle.controller;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
+import com.shutup.circle.BuildConfig;
 import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.GsonSingleton;
@@ -37,6 +43,16 @@ public class BaseActivity extends AppCompatActivity implements Constants{
         initGsonInstance();
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override

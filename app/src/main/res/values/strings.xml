@@ -11,4 +11,6 @@
     <string name="answerNumTitle">个回答</string>
     <string name="questionAnswerTitle">问答</string>
     <string name="addQuestionTitle">撰写提问</string>
+    <string name="addAnswerTitle">撰写回答</string>
+    <string name="addBtnTitle">确定</string>
 </resources>

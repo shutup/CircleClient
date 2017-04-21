@@ -18,14 +18,16 @@
             android:inputType="textMultiLine|textNoSuggestions"
             android:imeOptions="flagNoEnterAction"
             android:id="@+id/todoContent"
-            android:gravity="top|left"
+            android:gravity="top|start"
             android:background="@null"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:maxHeight="300dp"
+            android:minHeight="50dp"
+            />
         <Button
             android:id="@+id/addBtn"
-            android:text="add"
+            android:text="@string/addBtnTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
