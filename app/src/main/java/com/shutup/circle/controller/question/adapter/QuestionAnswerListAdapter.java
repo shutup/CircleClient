@@ -13,16 +13,31 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shutup.circle.R;
+import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.DateUtils;
+import com.shutup.circle.common.GsonSingleton;
+import com.shutup.circle.common.RetrofitSingleton;
 import com.shutup.circle.controller.question.CommentAddActivity;
+import com.shutup.circle.controller.question.QuestionDetailActivity;
 import com.shutup.circle.model.persis.Answer;
 import com.shutup.circle.model.persis.Question;
+import com.shutup.circle.model.response.LoginUserResponse;
+import com.shutup.circle.model.response.RestInfo;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.realm.Realm;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by shutup on 2017/4/9.
@@ -31,10 +46,14 @@ import butterknife.InjectView;
 public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnswerListAdapter.MyViewHolder> implements Constants {
     private Context mContext;
     private Question mQuestion;
+    private Gson mGson;
+    private CircleApi mCircleApi;
 
     public QuestionAnswerListAdapter(Context context, Question question) {
         mContext = context;
         mQuestion = question;
+        mCircleApi = RetrofitSingleton.getApiInstance(CircleApi.class);
+        mGson = GsonSingleton.getGson();
     }
 
     @Override
@@ -44,7 +63,7 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Answer answer = mQuestion.getAnswers().get(position);
         if (!answer.isValid()) {
             return;
@@ -58,6 +77,18 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
         holder.mUserName.setText(answer.getUser().getUsername());
         holder.mCreateDateContent.setText(DateUtils.formatDate(answer.getCreatedAt()));
         holder.mAnswerContent.setText(answer.getAnswer());
+        holder.mAgreeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAgreeOrDisagree(holder,true);
+            }
+        });
+        holder.mDisagreeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAgreeOrDisagree(holder,false);
+            }
+        });
         holder.mAgreeNum.setText(answer.getAgreedUsers().size() + "");
         holder.mDisagreeNum.setText(answer.getDisagreedUsers().size() + "");
 
@@ -71,7 +102,7 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
                 mContext.startActivity(intent);
             }
         });
-        CommentListAdapter commentListAdapter = new CommentListAdapter(mContext, mQuestion, answer);
+        CommentListAdapter commentListAdapter = new CommentListAdapter(mContext, mQuestion, answer, position);
         holder.mCommentRecyclerView.setAdapter(commentListAdapter);
         holder.mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
     }
@@ -112,5 +143,54 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
             super(view);
             ButterKnife.inject(this, view);
         }
+    }
+
+    private void processAgreeOrDisagree(final MyViewHolder holder, boolean isAgree){
+        Realm realm = Realm.getDefaultInstance();
+        LoginUserResponse loginUserResponse = realm.where(LoginUserResponse.class).findFirst();
+        Answer answer = mQuestion.getAnswers().get(holder.getAdapterPosition());
+        Call<ResponseBody> call = null;
+        if (isAgree) {
+            call = mCircleApi.answerAgree(mQuestion.getId(),answer.getId(),loginUserResponse.getToken());
+        }else {
+            call = mCircleApi.answerDisagree(mQuestion.getId(),answer.getId(),loginUserResponse.getToken());
+        }
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Gson gson = mGson;
+                if (response.isSuccessful()) {
+                    try {
+                        Question question = gson.fromJson(response.body().string(),Question.class);
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        realm.insertOrUpdate(question);
+                        realm.commitTransaction();
+                        mQuestion = question;
+                        notifyItemChanged(holder.getAdapterPosition());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    RestInfo info = null;
+                    try {
+                        info = gson.fromJson(response.errorBody().string(),RestInfo.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (info!= null) {
+                        Toast.makeText(mContext, info.getMsg(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(mContext, "请求异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "请求异常", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

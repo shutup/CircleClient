@@ -41,9 +41,9 @@ public class CommentAddActivity extends BaseActivity {
     @InjectView(R.id.publishBtn)
     Button mPublishBtn;
 
-    private int questionId;
-    private int answerId;
-    private int commentId;
+    private Long questionId;
+    private Long answerId;
+    private Long commentId;
     private Long userId;
     private String hintStr;
 
@@ -58,9 +58,9 @@ public class CommentAddActivity extends BaseActivity {
 
     private void initParams() {
         Intent intent = getIntent();
-        questionId = intent.getIntExtra(QUESTION_ID, -1);
-        answerId = intent.getIntExtra(ANSWER_ID, -1);
-        commentId = intent.getIntExtra(COMMENT_ID, -1);
+        questionId = intent.getLongExtra(QUESTION_ID, -1);
+        answerId = intent.getLongExtra(ANSWER_ID, -1);
+        commentId = intent.getLongExtra(COMMENT_ID, -1);
         userId = intent.getLongExtra(USER_ID, -1);
         hintStr = intent.getStringExtra(HINT_STR);
     }
@@ -117,9 +117,9 @@ public class CommentAddActivity extends BaseActivity {
         }
     }
 
-    private void processCommentReply(int questionId,
-                                     int answerId,
-                                     int commentId,
+    private void processCommentReply(Long questionId,
+                                     Long answerId,
+                                     Long commentId,
                                      String token,
                                      QuestionAnswerCommentCreateRequest commentCreateRequest) {
         Call<ResponseBody> call = getCircleApi().questionAnswerCommentAddReply(questionId,
@@ -163,8 +163,8 @@ public class CommentAddActivity extends BaseActivity {
         });
     }
 
-    private void processComment(int questionId,
-                                int answerId,
+    private void processComment(Long questionId,
+                                Long answerId,
                                 String token,
                                 QuestionAnswerCommentCreateRequest commentCreateRequest) {
         Call<ResponseBody> call = getCircleApi().questionAnswerCommentAdd(questionId,

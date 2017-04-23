@@ -21,7 +21,7 @@ public class Question extends RealmObject{
      * disagreedUsers : []
      */
     @PrimaryKey
-    private int id;
+    private Long id;
     private String question;
     private User user;
     private Date createdAt;
@@ -32,11 +32,11 @@ public class Question extends RealmObject{
 
     public Question(){}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

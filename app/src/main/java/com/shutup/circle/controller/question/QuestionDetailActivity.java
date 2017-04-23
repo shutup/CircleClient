@@ -12,19 +12,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shutup.circle.R;
 import com.shutup.circle.common.DateUtils;
 import com.shutup.circle.controller.BaseActivity;
 import com.shutup.circle.controller.question.adapter.QuestionAnswerListAdapter;
 import com.shutup.circle.model.persis.Question;
+import com.shutup.circle.model.response.LoginUserResponse;
+import com.shutup.circle.model.response.RestInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import io.realm.Realm;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuestionDetailActivity extends BaseActivity {
 
@@ -123,8 +134,10 @@ public class QuestionDetailActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.agreeBtn:
+                processAgreeOrDisagree(true);
                 break;
             case R.id.disagreeBtn:
+                processAgreeOrDisagree(false);
                 break;
             case R.id.addAnswerFAB:
                 Intent intent = new Intent(QuestionDetailActivity.this, QuestionAnswerAddActivity.class);
@@ -132,5 +145,53 @@ public class QuestionDetailActivity extends BaseActivity {
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void processAgreeOrDisagree(boolean isAgree){
+        Realm realm = Realm.getDefaultInstance();
+        LoginUserResponse loginUserResponse = realm.where(LoginUserResponse.class).findFirst();
+        Call<ResponseBody> call = null;
+        if (isAgree) {
+           call = getCircleApi().questionAgree(mQuestion.getId(),loginUserResponse.getToken());
+        }else {
+           call = getCircleApi().questionDisagree(mQuestion.getId(),loginUserResponse.getToken());
+        }
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Gson gson = getGson();
+                if (response.isSuccessful()) {
+                    try {
+                        Question question = gson.fromJson(response.body().string(),Question.class);
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        realm.insertOrUpdate(question);
+                        realm.commitTransaction();
+
+                        reloadUI(question);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    RestInfo info = null;
+                    try {
+                        info = gson.fromJson(response.errorBody().string(),RestInfo.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (info!= null) {
+                        Toast.makeText(QuestionDetailActivity.this, info.getMsg(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(QuestionDetailActivity.this, "请求异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(QuestionDetailActivity.this, "请求异常", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

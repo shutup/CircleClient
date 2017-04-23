@@ -108,11 +108,11 @@ public class LoginActivity extends BaseActivity {
 
     private boolean checkUserPhone() {
         String userPhoneStr = mUserPhone.getEditableText().toString().trim();
-        if (userPhoneStr.length() > 0 && userPhoneStr.length() == getResources().getInteger(R.integer.phoneNumLength)) {
+        if (userPhoneStr.length() > 1 && userPhoneStr.length() <= getResources().getInteger(R.integer.phoneNumLength)) {
             mUserPhoneInputLayout.setErrorEnabled(false);
             return true;
         }else {
-            mUserPhoneInputLayout.setError("手机号码长度必须为11位!");
+            mUserPhoneInputLayout.setError("用户名长度必须为2-10位！");
             mUserPhoneInputLayout.setErrorEnabled(true);
             return false;
         }

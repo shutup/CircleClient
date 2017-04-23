@@ -182,12 +182,12 @@ public class RegisterActivity extends BaseActivity implements Constants {
 
     private boolean checkUserPhone() {
         CharSequence charSequence = mUserPhone.getEditableText().toString().trim();
-        if (charSequence.length() > 0 && charSequence.length() == getResources().getInteger(R.integer.phoneNumLength)) {
+        if (charSequence.length() > 1 && charSequence.length() <= getResources().getInteger(R.integer.phoneNumLength)) {
             mUserPhoneInputLayout.setErrorEnabled(false);
             return true;
         } else {
             mUserPhoneInputLayout.setErrorEnabled(false);
-            mUserPhoneInputLayout.setError("手机号码长度必须为11位!");
+            mUserPhoneInputLayout.setError("用户名必须为2-10位!");
             return false;
         }
     }

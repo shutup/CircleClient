@@ -3,7 +3,7 @@
     <string name="loginBtnTitle">登录</string>
     <string name="registerBtnTitle">注册</string>
     <string name="passwordHintStr">登录密码</string>
-    <string name="userNameHintStr">请输入手机号</string>
+    <string name="userNameHintStr">请输入用户名</string>
     <string name="passwordConfirmHintStr">确认登录密码</string>
     <string name="loginActivityTitle">登录</string>
     <string name="registerActivityTitle">注册</string>

@@ -41,7 +41,7 @@ public class QuestionAnswerAddActivity extends BaseActivity {
     @InjectView(R.id.addBtn)
     Button mAddBtn;
 
-    private int questionId;
+    private Long questionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class QuestionAnswerAddActivity extends BaseActivity {
 
     private void initQuestionId() {
         Intent intent = getIntent();
-        questionId = intent.getIntExtra(QUESTION_ID,-1);
+        questionId = intent.getLongExtra(QUESTION_ID,-1);
     }
 
     private void initToolBar() {

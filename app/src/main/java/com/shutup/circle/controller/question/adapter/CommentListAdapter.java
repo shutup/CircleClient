@@ -23,31 +23,50 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shutup.circle.BuildConfig;
 import com.shutup.circle.R;
+import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.DateUtils;
+import com.shutup.circle.common.GsonSingleton;
+import com.shutup.circle.common.RetrofitSingleton;
 import com.shutup.circle.controller.question.CommentAddActivity;
 import com.shutup.circle.model.persis.Answer;
 import com.shutup.circle.model.persis.Comment;
 import com.shutup.circle.model.persis.Question;
+import com.shutup.circle.model.response.LoginUserResponse;
+import com.shutup.circle.model.response.RestInfo;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.realm.Realm;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by shutup on 2017/4/11.
  */
 
 public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.MyViewHolder> implements Constants {
+    private final CircleApi mCircleApi;
+    private final Gson mGson;
     private Context mContext;
     private Question mQuestion;
     private Answer mAnswer;
+    private int mIndex;
 
-    public CommentListAdapter(Context context, Question question, Answer answer) {
+    public CommentListAdapter(Context context, Question question, Answer answer,int index) {
         mContext = context;
         mQuestion = question;
         mAnswer = answer;
+        mIndex = index;
+        mCircleApi = RetrofitSingleton.getApiInstance(CircleApi.class);
+        mGson = GsonSingleton.getGson();
     }
 
     @Override
@@ -63,9 +82,22 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             return;
         }
 
+        holder.mAgreeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAgreeOrDisagree(holder,true);
+            }
+        });
+        holder.mDisagreeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAgreeOrDisagree(holder,false);
+            }
+        });
+
         holder.mAgreeNum.setText(comment.getAgreedUsers().size() + "");
         holder.mDisagreeNum.setText(comment.getDisagreedUsers().size() + "");
-        holder.mCreateDateContent.setText(DateUtils.formatDate(comment.getCreatedAt()));
+        holder.mCreateDateContent.setText(DateUtils.formatMeanningfulDate(comment.getCreatedAt()));
         if (comment.isReply()) {
             holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
             holder.mUserPhoto.setText(comment.getReplyUser().getUsername().toUpperCase().substring(0, 1));
@@ -194,5 +226,55 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             super(view);
             ButterKnife.inject(this, view);
         }
+    }
+
+    private void processAgreeOrDisagree(final CommentListAdapter.MyViewHolder holder, boolean isAgree){
+        Realm realm = Realm.getDefaultInstance();
+        LoginUserResponse loginUserResponse = realm.where(LoginUserResponse.class).findFirst();
+        Comment comment = mAnswer.getComments().get(holder.getAdapterPosition());
+        Call<ResponseBody> call = null;
+        if (isAgree) {
+            call = mCircleApi.commentAgree(mQuestion.getId(),mAnswer.getId(),comment.getId(),loginUserResponse.getToken());
+        }else {
+            call = mCircleApi.commentDisagree(mQuestion.getId(),mAnswer.getId(),comment.getId(),loginUserResponse.getToken());
+        }
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Gson gson = mGson;
+                if (response.isSuccessful()) {
+                    try {
+                        Question question = gson.fromJson(response.body().string(),Question.class);
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        realm.insertOrUpdate(question);
+                        realm.commitTransaction();
+                        mQuestion = question;
+                        mAnswer = question.getAnswers().get(mIndex);
+                        notifyItemChanged(holder.getAdapterPosition());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    RestInfo info = null;
+                    try {
+                        info = gson.fromJson(response.errorBody().string(),RestInfo.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (info!= null) {
+                        Toast.makeText(mContext, info.getMsg(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(mContext, "请求异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "请求异常", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

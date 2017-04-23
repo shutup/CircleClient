@@ -23,7 +23,7 @@ public class Comment extends RealmObject{
      * comments : []
      */
     @PrimaryKey
-    private int id;
+    private Long id;
     private String comment;
     private User user;
     private User replyUser;
@@ -34,11 +34,12 @@ public class Comment extends RealmObject{
     private RealmList<User> disagreedUsers;
 
     public Comment(){}
-    public int getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
