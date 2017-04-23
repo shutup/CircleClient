@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
-import com.shutup.circle.BuildConfig;
 import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.GsonSingleton;
