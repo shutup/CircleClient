@@ -30,6 +30,7 @@ import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.DateUtils;
 import com.shutup.circle.common.GsonSingleton;
 import com.shutup.circle.common.RetrofitSingleton;
+import com.shutup.circle.common.StringUtils;
 import com.shutup.circle.controller.question.CommentAddActivity;
 import com.shutup.circle.model.persis.Answer;
 import com.shutup.circle.model.persis.Comment;
@@ -100,9 +101,9 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         if (comment.isReply()) {
             holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
             holder.mUserPhoto.setText(comment.getReplyUser().getUsername().toUpperCase().substring(0, 1));
-            int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
+//            int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
             GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
-            gradientDrawable.setColor(color);
+            gradientDrawable.setColor(StringUtils.generateColorFromString(comment.getReplyUser().getUsername()));
             holder.mUserName.setText(comment.getReplyUser().getUsername());
             final String userName = comment.getUser().getUsername();
             SpannableString usernameStr = new SpannableString(userName);
@@ -141,9 +142,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         } else {
             holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
             holder.mUserPhoto.setText(comment.getUser().getUsername().toUpperCase().substring(0, 1));
-            int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
             GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
-            gradientDrawable.setColor(color);
+            gradientDrawable.setColor(StringUtils.generateColorFromString(comment.getUser().getUsername()));
             holder.mUserName.setText(comment.getUser().getUsername());
             holder.mContent.setText(comment.getComment());
         }

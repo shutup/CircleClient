@@ -42,7 +42,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         }
         holder.mQuestionContent.setText(question.getQuestion());
         holder.mAnswerNumContent.setText(question.getAnswers().size() + mContext.getString(R.string.answerNumTitle));
-        holder.mCreateDateContent.setText(DateUtils.formatDate(question.getCreatedAt()));
+        holder.mCreateDateContent.setText(DateUtils.formatMeanningfulDate(question.getCreatedAt()));
 
     }
 

@@ -2,7 +2,6 @@ package com.shutup.circle.controller.question.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +21,8 @@ import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.DateUtils;
 import com.shutup.circle.common.GsonSingleton;
 import com.shutup.circle.common.RetrofitSingleton;
+import com.shutup.circle.common.StringUtils;
 import com.shutup.circle.controller.question.CommentAddActivity;
-import com.shutup.circle.controller.question.QuestionDetailActivity;
 import com.shutup.circle.model.persis.Answer;
 import com.shutup.circle.model.persis.Question;
 import com.shutup.circle.model.response.LoginUserResponse;
@@ -71,11 +70,10 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
 
         holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
         holder.mUserPhoto.setText(answer.getUser().getUsername().toUpperCase().substring(0, 1));
-        int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
         GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
-        gradientDrawable.setColor(color);
+        gradientDrawable.setColor(StringUtils.generateColorFromString(answer.getUser().getUsername()));
         holder.mUserName.setText(answer.getUser().getUsername());
-        holder.mCreateDateContent.setText(DateUtils.formatDate(answer.getCreatedAt()));
+        holder.mCreateDateContent.setText(DateUtils.formatMeanningfulDate(answer.getCreatedAt()));
         holder.mAnswerContent.setText(answer.getAnswer());
         holder.mAgreeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

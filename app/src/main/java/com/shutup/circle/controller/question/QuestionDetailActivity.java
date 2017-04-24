@@ -1,7 +1,6 @@
 package com.shutup.circle.controller.question;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.shutup.circle.R;
 import com.shutup.circle.common.DateUtils;
+import com.shutup.circle.common.StringUtils;
 import com.shutup.circle.controller.BaseActivity;
 import com.shutup.circle.controller.question.adapter.QuestionAnswerListAdapter;
 import com.shutup.circle.model.persis.Question;
@@ -112,11 +112,10 @@ public class QuestionDetailActivity extends BaseActivity {
         }
         mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
         mUserPhoto.setText(question.getUser().getUsername().toUpperCase().substring(0, 1));
-        int color = Color.HSVToColor(new float[]{(float) Math.random(), (float) Math.random(), 0.5F + ((float) Math.random()) / 2F});
         GradientDrawable gradientDrawable = (GradientDrawable) mUserPhoto.getBackground();
-        gradientDrawable.setColor(color);
+        gradientDrawable.setColor(StringUtils.generateColorFromString(question.getUser().getUsername()));
         mUserName.setText(question.getUser().getUsername());
-        mCreateDateContent.setText(DateUtils.formatDate(question.getCreatedAt()));
+        mCreateDateContent.setText(DateUtils.formatMeanningfulDate(question.getCreatedAt()));
         mQuestionContent.setText(question.getQuestion());
         mAgreeNum.setText(question.getAgreedUsers().size() + "");
         mDisagreeNum.setText(question.getDisagreedUsers().size() + "");
