@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorCommentInputBg">#3f3f3f</color>
+    <color name="colorSectionNormal">#3f3f3f</color>
+    <color name="colorSectionSelected">#ff4081</color>
 
 </resources>

@@ -14,4 +14,9 @@ public interface Constants {
     String COMMENT_ID = "COMMENT_ID";
     String USER_ID = "USER_ID";
     String HINT_STR = "HINT_STR";
+
+    int SECTION_1 = 1;
+    int SECTION_2 = 2;
+    int SECTION_3 = 3;
+    int SECTION_4 = 4;
 }

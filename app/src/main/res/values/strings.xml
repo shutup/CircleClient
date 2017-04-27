@@ -13,4 +13,7 @@
     <string name="addQuestionTitle">撰写提问</string>
     <string name="addAnswerTitle">撰写回答</string>
     <string name="addBtnTitle">确定</string>
+    <string name="section_1_title_str">问答</string>
+    <string name="section_2_title_str">投票</string>
+    <string name="section_4_title_str">我</string>
 </resources>

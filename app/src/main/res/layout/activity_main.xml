@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shutup.circle.controller.MainActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_question"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_question"
+                android:layout_width="@dimen/section_image_size"
+                android:layout_height="@dimen/section_image_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_answer"/>
+
+            <TextView
+                android:paddingTop="@dimen/section_space_size"
+                android:id="@+id/text_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_1_title_str"
+                android:textSize="@dimen/section_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_vote"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_vote"
+                android:layout_width="@dimen/section_image_size"
+                android:layout_height="@dimen/section_image_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_vote"/>
+
+            <TextView
+                android:paddingTop="@dimen/section_space_size"
+                android:id="@+id/text_vote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_2_title_str"
+                android:textSize="@dimen/section_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_moment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_moment"
+                android:layout_width="@dimen/section_image_size"
+                android:layout_height="@dimen/section_image_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_moment"/>
+
+            <TextView
+                android:paddingTop="@dimen/section_space_size"
+                android:id="@+id/text_moment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="瞬间"
+                android:textSize="@dimen/section_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_me"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_me"
+                android:layout_width="@dimen/section_image_size"
+                android:layout_height="@dimen/section_image_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_me"/>
+
+            <TextView
+                android:paddingTop="@dimen/section_space_size"
+                android:id="@+id/text_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_4_title_str"
+                android:textSize="@dimen/section_text_size"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

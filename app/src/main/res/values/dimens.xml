@@ -3,4 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbar_padding_top">0dp</dimen>
+    <dimen name="section_image_size">20dp</dimen>
+    <dimen name="section_text_size">10sp</dimen>
+    <dimen name="section_space_size">5dp</dimen>
+
+
 </resources>
