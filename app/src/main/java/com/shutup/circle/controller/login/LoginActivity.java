@@ -19,6 +19,7 @@ import com.shutup.circle.R;
 import com.shutup.circle.common.CircleApi;
 import com.shutup.circle.common.RetrofitSingleton;
 import com.shutup.circle.controller.BaseActivity;
+import com.shutup.circle.controller.MainActivity;
 import com.shutup.circle.controller.question.QuestionListActivity;
 import com.shutup.circle.model.request.LoginUserRequest;
 import com.shutup.circle.model.response.LoginUserResponse;
@@ -162,7 +163,7 @@ public class LoginActivity extends BaseActivity {
                                 realm.beginTransaction();
                                 realm.insertOrUpdate(loginUserResponse);
                                 realm.commitTransaction();
-                                Intent intent = new Intent(LoginActivity.this, QuestionListActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             }else {

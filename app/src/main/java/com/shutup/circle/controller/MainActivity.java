@@ -1,8 +1,13 @@
 package com.shutup.circle.controller;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -12,6 +17,12 @@ import android.widget.TextView;
 
 import com.shutup.circle.R;
 import com.shutup.circle.common.Constants;
+import com.shutup.circle.controller.me.MeFragment;
+import com.shutup.circle.controller.question.QuestionListFragment;
+import com.shutup.circle.controller.setting.SettingActivity;
+import com.shutup.circle.controller.vote.VoteListFragment;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,15 +60,56 @@ public class MainActivity extends BaseActivity implements Constants {
     TextView mTextMe;
 
     private Animation mAnimation;
+    private FragmentManager mFragmentManager;
+    private ArrayList<Fragment> mFragments;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        initAnimation();
+        initToolBar();
         restoreState();
+        initAnimation();
+        initFragments();
         selectSection(SECTION_1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_me,menu);
+        if (index == SECTION_4) {
+            menu.setGroupVisible(R.id.menu_setting_group,true);
+        }else {
+            menu.setGroupVisible(R.id.menu_setting_group,false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_setting) {
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolBar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
+    }
+
+    private void initFragments() {
+        mFragments = new ArrayList<>();
+        mFragments.add(new QuestionListFragment());
+        mFragments.add(new VoteListFragment());
+        mFragments.add(new VoteListFragment());
+        mFragments.add(new MeFragment());
+        mFragmentManager = getSupportFragmentManager();
     }
 
     private void initAnimation() {
@@ -99,7 +151,7 @@ public class MainActivity extends BaseActivity implements Constants {
     }
 
     private void selectSection(int index) {
-
+        selectTitle(index);
         if (index == SECTION_1) {
             mTextQuestion.setTextColor(getResources().getColor(R.color.colorSectionSelected));
             mImageQuestion.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.colorSectionSelected), PorterDuff.Mode.SRC_IN);
@@ -120,6 +172,25 @@ public class MainActivity extends BaseActivity implements Constants {
             mImageMe.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.colorSectionSelected), PorterDuff.Mode.SRC_IN);
             mImageMe.startAnimation(mAnimation);
 
+        }
+        selectFragment(index);
+    }
+
+    private void selectFragment(int index) {
+        mFragmentManager.beginTransaction().replace(R.id.frameLayout, mFragments.get(index - 1)).commit();
+    }
+
+    private void selectTitle(int index) {
+        this.index = index;
+        invalidateOptionsMenu();
+        if (index == SECTION_1) {
+            mToolbarTitle.setText(R.string.questionAnswerTitle);
+        }else if (index == SECTION_2) {
+            mToolbarTitle.setText(R.string.voteTitleStr);
+        }else if (index == SECTION_3) {
+            mToolbarTitle.setText(R.string.commentTitleStr);
+        }else if (index == SECTION_4) {
+            mToolbarTitle.setText(R.string.meTitleStr);
         }
     }
 }

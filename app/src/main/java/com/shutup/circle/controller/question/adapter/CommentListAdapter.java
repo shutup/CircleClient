@@ -97,7 +97,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
         holder.mAgreeNum.setText(comment.getAgreedUsers().size() + "");
         holder.mDisagreeNum.setText(comment.getDisagreedUsers().size() + "");
-        holder.mCreateDateContent.setText(DateUtils.formatMeanningfulDate(comment.getCreatedAt()));
+        holder.mCreateDateContent.setText(DateUtils.formatMeaningfulDate(mContext.getResources(),comment.getCreatedAt()));
         if (comment.isReply()) {
             holder.mUserPhoto.setBackgroundResource(R.drawable.round_btn_bg);
             holder.mUserPhoto.setText(comment.getReplyUser().getUsername().toUpperCase().substring(0, 1));

@@ -73,7 +73,7 @@ public class QuestionAnswerListAdapter extends RecyclerView.Adapter<QuestionAnsw
         GradientDrawable gradientDrawable = (GradientDrawable) holder.mUserPhoto.getBackground();
         gradientDrawable.setColor(StringUtils.generateColorFromString(answer.getUser().getUsername()));
         holder.mUserName.setText(answer.getUser().getUsername());
-        holder.mCreateDateContent.setText(DateUtils.formatMeanningfulDate(answer.getCreatedAt()));
+        holder.mCreateDateContent.setText(DateUtils.formatMeaningfulDate(mContext.getResources(),answer.getCreatedAt()));
         holder.mAnswerContent.setText(answer.getAnswer());
         holder.mAgreeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

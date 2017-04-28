@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Circle</string>
+    <string name="addAnswerTitle">Add Answer</string>
+    <string name="addBtnTitle">OK</string>
+    <string name="addQuestionTitle">Add Question</string>
+    <string name="answerNumTitle">%1$d answers</string>
+    <string name="btnLogoutTitleStr">Logout</string>
+    <string name="commentTitleStr">Comment</string>
+    <string name="loginActivityTitle">Login</string>
+    <string name="loginBtnTitle">Login</string>
+    <string name="meTitleStr">Me</string>
+    <string name="passwordConfirmHintStr">Confirm Password</string>
+    <string name="passwordHintStr">Password</string>
+    <string name="questionAnswerTitle">Q&amp;A</string>
+    <string name="registerActivityTitle">Register</string>
+    <string name="registerBtnTitle">Register</string>
+    <string name="section_1_title_str">Q&amp;A</string>
+    <string name="section_2_title_str">Vote</string>
+    <string name="section_4_title_str">Me</string>
+    <string name="settingTitleStr">Setting</string>
+    <string name="userNameHintStr">Username</string>
+    <string name="voteTitleStr">Vote</string>
+    <string name="daysAgo">%1$d days ago</string>
+    <string name="hoursAgo">%1$d hours ago</string>
+    <string name="minutesAgo">%1$d minutes ago</string>
+    <string name="secondsAgo">%1$d seconds ago</string>
+</resources>

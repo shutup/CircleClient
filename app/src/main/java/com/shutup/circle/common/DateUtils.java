@@ -1,5 +1,9 @@
 package com.shutup.circle.common;
 
+import android.content.res.Resources;
+
+import com.shutup.circle.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,24 +17,28 @@ public class DateUtils {
         return simpleDateFormat.format(date);
     }
 
-    public static String formatMeanningfulDate(Date date) {
+    public static String formatMeaningfulDate(Resources resources, Date date) {
         Date current = new Date();
         Long seconds = (current.getTime()-date.getTime())/1000;
         Long days = seconds / (24*60*60);
         if (days >=1 && days <=3 ) {
-            return days + "天前";
+            return resources.getString(R.string.daysAgo,days);
         }else if (days > 3){
             return formatDate(date);
         }else {
             Long hours = seconds / 3600 ;
             if (hours >= 1) {
-                return hours + "小时前";
+                return resources.getString(R.string.hoursAgo,hours);
             }else {
                 Long minutes = seconds / 60;
                 if (minutes >= 1) {
-                    return minutes + "分钟前";
+                    return resources.getString(R.string.minutesAgo,minutes);
                 }else {
-                    return seconds + "秒前";
+                    if (seconds > 0){
+                        return resources.getString(R.string.secondsAgo,seconds);
+                    }else {
+                        return formatDate(date);
+                    }
                 }
             }
         }

@@ -15,8 +15,8 @@
         </activity>
         <activity android:name=".controller.login.RegisterActivity">
         </activity>
-        <activity android:name=".controller.question.QuestionListActivity">
-        </activity>
+        <!-- <activity android:name=".controller.question.QuestionListActivity"> -->
+        <!-- </activity> -->
         <activity android:name=".controller.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -35,6 +35,8 @@
             android:theme="@style/Theme.AppCompat.Translucent">
         </activity>
         <activity android:name=".controller.MainActivity">
+        </activity>
+        <activity android:name=".controller.setting.SettingActivity">
         </activity>
     </application>
 

@@ -115,7 +115,7 @@ public class QuestionDetailActivity extends BaseActivity {
         GradientDrawable gradientDrawable = (GradientDrawable) mUserPhoto.getBackground();
         gradientDrawable.setColor(StringUtils.generateColorFromString(question.getUser().getUsername()));
         mUserName.setText(question.getUser().getUsername());
-        mCreateDateContent.setText(DateUtils.formatMeanningfulDate(question.getCreatedAt()));
+        mCreateDateContent.setText(DateUtils.formatMeaningfulDate(getResources(),question.getCreatedAt()));
         mQuestionContent.setText(question.getQuestion());
         mAgreeNum.setText(question.getAgreedUsers().size() + "");
         mDisagreeNum.setText(question.getDisagreedUsers().size() + "");
