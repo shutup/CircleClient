@@ -18,6 +18,8 @@
             android:id="@+id/questionContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="5"
             tools:text="1+1=?"/>
 
         <RelativeLayout

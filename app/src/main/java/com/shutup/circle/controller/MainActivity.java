@@ -19,6 +19,7 @@ import com.shutup.circle.R;
 import com.shutup.circle.common.Constants;
 import com.shutup.circle.controller.me.MeFragment;
 import com.shutup.circle.controller.question.QuestionListFragment;
+import com.shutup.circle.controller.question.QuestionMainFragment;
 import com.shutup.circle.controller.setting.SettingActivity;
 import com.shutup.circle.controller.vote.VoteListFragment;
 
@@ -105,7 +106,7 @@ public class MainActivity extends BaseActivity implements Constants {
 
     private void initFragments() {
         mFragments = new ArrayList<>();
-        mFragments.add(new QuestionListFragment());
+        mFragments.add(new QuestionMainFragment());
         mFragments.add(new VoteListFragment());
         mFragments.add(new VoteListFragment());
         mFragments.add(new MeFragment());

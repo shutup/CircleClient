@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.shutup.circle.BuildConfig;
 import com.shutup.circle.R;
+import com.shutup.circle.common.Constants;
 import com.shutup.circle.common.EndlessRecyclerViewScrollListener;
 import com.shutup.circle.common.RecyclerTouchListener;
 import com.shutup.circle.controller.BaseFragment;
@@ -50,7 +51,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QuestionListFragment extends BaseFragment {
+public class QuestionListFragment extends BaseFragment implements Constants{
 
 
     @InjectView(R.id.recyclerView)
@@ -64,7 +65,7 @@ public class QuestionListFragment extends BaseFragment {
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private RealmList<Question> mQuestions;
     private Realm mRealm;
-
+    private int currentType = QUESTION_ORDER_BY_TIME;
 
     public QuestionListFragment() {
         if (BuildConfig.DEBUG) Log.d("QuestionListFragment", "frame");
@@ -76,6 +77,9 @@ public class QuestionListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (BuildConfig.DEBUG) Log.d("QuestionListFragment", "onCreateView");
+        Bundle bundle = getArguments();
+        currentType = bundle.getInt(QUESTION_ORDER_BY_TYPE,QUESTION_ORDER_BY_TIME);
+        if (BuildConfig.DEBUG) Log.d("QuestionListFragment", "currentType:" + currentType);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_question_list, container, false);
         ButterKnife.inject(this, view);
@@ -170,7 +174,16 @@ public class QuestionListFragment extends BaseFragment {
     private void loadServerData(int page) {
         LoginUserResponse loginUserResponse = mRealm.where(LoginUserResponse.class).findFirst();
 
-        Call<ResponseBody> call = getCircleApi().questionTotalList(page,loginUserResponse.getToken());
+        Call<ResponseBody> call=null;
+        if (currentType == QUESTION_ORDER_BY_TIME) {
+            call = getCircleApi().questionTotalList(page,loginUserResponse.getToken());
+        }else if (currentType == QUESTION_ORDER_BY_AGREEDUSERS) {
+            call = getCircleApi().questionTotalListByUsersCount(page,loginUserResponse.getToken(),true);
+        }else if (currentType == QUESTION_ORDER_BY_DISAGREEDUSERS) {
+            call = getCircleApi().questionTotalListByUsersCount(page,loginUserResponse.getToken(),false);
+        }
+        if (null == call)
+            return;
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -223,9 +236,6 @@ public class QuestionListFragment extends BaseFragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                mQuestions.clear();
-//                mQuestionListAdapter.setQuestions(mQuestions);
-//                mQuestionListAdapter.notifyDataSetChanged();
                 mEndlessRecyclerViewScrollListener.resetState();
                 loadServerData(0);
             }

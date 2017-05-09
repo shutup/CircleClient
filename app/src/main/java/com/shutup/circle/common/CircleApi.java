@@ -107,6 +107,17 @@ public interface CircleApi {
     Call<ResponseBody> questionTotalList(@Query("page") int page, @Header("token") String token);
 
     /**
+     * 总的提问列表
+     * 按点赞、踩排列
+     *
+     * @param page
+     * @param token
+     * @return
+     */
+    @GET("/question/listsBy")
+    Call<ResponseBody> questionTotalListByUsersCount(@Query("page") int page, @Header("token") String token,@Query("isAgree") boolean isAgree);
+
+    /**
      * 点赞问题
      *
      * @param questionId

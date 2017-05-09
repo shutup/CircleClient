@@ -11,149 +11,160 @@
     tools:context="com.shutup.circle.controller.question.QuestionDetailActivity">
 
     <include layout="@layout/toolbar"/>
-
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="5dp">
-
+        android:layout_height="match_parent">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
+            android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/userPhoto"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-
-                    android:background="@drawable/round_btn_bg"/>
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/userName"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        tools:text="123"
-                        />
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/userPhoto"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+
+                            android:background="@drawable/round_btn_bg"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/userName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimary"
+                                tools:text="123"
+                                />
+
+                            <TextView
+                                android:id="@+id/createDateContent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                tools:text="456"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/createDateContent"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/questionContent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        tools:text="456"
+                        android:ellipsize="end"
+                        android:maxLines="5"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        tools:text="i \nam \nquestion"
                         />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/agreeBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_thumb_up_white"
+                                />
+
+                            <TextView
+                                android:id="@+id/agreeNum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                tools:text="999"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/disagreeBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_thumb_down_white"
+                                />
+
+                            <TextView
+                                android:id="@+id/disagreeNum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                tools:text="999"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
-            </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-            <TextView
-                android:id="@+id/questionContent"
+
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                tools:text="i \nam \nquestion"
-                />
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/addAnswerFAB"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/agreeBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_thumb_up_white"
-                        />
-
-                    <TextView
-                        android:id="@+id/agreeNum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        tools:text="999"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/disagreeBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_thumb_down_white"
-                        />
-
-                    <TextView
-                        android:id="@+id/disagreeNum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        tools:text="999"/>
-                </LinearLayout>
-
-            </LinearLayout>
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_add_white"
+                    app:layout_anchor="@id/recyclerView"
+                    app:layout_anchorGravity="bottom|right|end"/>
+            </android.support.design.widget.CoordinatorLayout>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        >
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-        </android.support.v7.widget.RecyclerView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addAnswerFAB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add_white"
-            app:layout_anchor="@id/recyclerView"
-            app:layout_anchorGravity="bottom|right|end"/>
-    </android.support.design.widget.CoordinatorLayout>
+    </ScrollView>
 
 </LinearLayout>
 

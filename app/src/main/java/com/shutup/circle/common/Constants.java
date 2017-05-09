@@ -6,7 +6,6 @@ package com.shutup.circle.common;
 
 public interface Constants {
 //    String BASE_URL = "http://shutups.lan:8080";
-//    String BASE_URL = "https://todo.fleetinglife.cn";
     String BASE_URL = "https://circle.fleetinglife.cn";
 
     String QUESTION_ID = "QUESTION_ID";
@@ -19,4 +18,9 @@ public interface Constants {
     int SECTION_2 = 2;
     int SECTION_3 = 3;
     int SECTION_4 = 4;
+
+    String QUESTION_ORDER_BY_TYPE = "QUESTION_ORDER_BY_TYPE";
+    int QUESTION_ORDER_BY_TIME = 1;
+    int QUESTION_ORDER_BY_AGREEDUSERS = 2;
+    int QUESTION_ORDER_BY_DISAGREEDUSERS = 3;
 }

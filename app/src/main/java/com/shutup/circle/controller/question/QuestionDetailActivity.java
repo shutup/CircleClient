@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -129,7 +131,7 @@ public class QuestionDetailActivity extends BaseActivity {
         mRecyclerView.setAdapter(mQuestionAnswerListAdapter);
     }
 
-    @OnClick({R.id.agreeBtn, R.id.disagreeBtn, R.id.addAnswerFAB})
+    @OnClick({R.id.agreeBtn, R.id.disagreeBtn, R.id.addAnswerFAB,R.id.questionContent})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.agreeBtn:
@@ -142,6 +144,13 @@ public class QuestionDetailActivity extends BaseActivity {
                 Intent intent = new Intent(QuestionDetailActivity.this, QuestionAnswerAddActivity.class);
                 intent.putExtra(QUESTION_ID, mQuestion.getId());
                 startActivity(intent);
+                break;
+            case R.id.questionContent:
+                if ( TextViewCompat.getMaxLines(mQuestionContent) == 5) {
+                    mQuestionContent.setMaxLines(Integer.MAX_VALUE);
+                }else {
+                    mQuestionContent.setMaxLines(5);
+                }
                 break;
         }
     }

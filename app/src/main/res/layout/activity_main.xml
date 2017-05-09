@@ -92,7 +92,7 @@
                 android:id="@+id/text_moment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="瞬间"
+                android:text="@string/commentTitleStr"
                 android:textSize="@dimen/section_text_size"/>
         </LinearLayout>
 
