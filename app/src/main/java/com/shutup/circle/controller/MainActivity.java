@@ -178,7 +178,24 @@ public class MainActivity extends BaseActivity implements Constants {
     }
 
     private void selectFragment(int index) {
-        mFragmentManager.beginTransaction().replace(R.id.frameLayout, mFragments.get(index - 1)).commit();
+        Fragment fragment =  mFragments.get(index -1);
+        for (Fragment f :
+                mFragments) {
+            if (f.isAdded()){
+                mFragmentManager.beginTransaction().
+                        hide(f).
+                        commit();
+            }else {
+                mFragmentManager.beginTransaction().
+                        add(R.id.frameLayout, f).
+                        commit();
+            }
+        }
+        if (fragment.isAdded()) {
+            mFragmentManager.beginTransaction().
+                    show(mFragments.get(index - 1)).
+                    commit();
+        }
     }
 
     private void selectTitle(int index) {

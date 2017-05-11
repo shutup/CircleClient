@@ -166,6 +166,9 @@ public class QuestionListFragment extends BaseFragment implements Constants{
                 mQuestions.addAll(elements);
                 mQuestionListAdapter.setQuestions(mQuestions);
                 mQuestionListAdapter.notifyDataSetChanged();
+                if (mSwipeRefresh == null) {
+                    return;
+                }
                 mSwipeRefresh.setRefreshing(false);
             }
         });

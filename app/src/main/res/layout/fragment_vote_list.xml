@@ -5,8 +5,9 @@
              tools:context="com.shutup.circle.controller.vote.VoteListFragment">
 
     <TextView
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="vote"/>
+        android:text="coming soon!"/>
 
 </FrameLayout>
