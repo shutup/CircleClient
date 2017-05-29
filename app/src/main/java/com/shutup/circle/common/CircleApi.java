@@ -9,9 +9,11 @@ import com.shutup.circle.model.request.RegisterUserRequest;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -26,7 +28,7 @@ public interface CircleApi {
      * @param registerUserRequest
      * @return
      */
-    @POST("/user/register")
+    @POST("/v1/users")
     Call<ResponseBody> registerUser(@Body RegisterUserRequest registerUserRequest);
 
     /**
@@ -35,7 +37,7 @@ public interface CircleApi {
      * @param loginUserRequest
      * @return
      */
-    @POST("/user/login")
+    @POST("/v1/users/login")
     Call<ResponseBody> loginUser(@Body LoginUserRequest loginUserRequest);
 
     /**
@@ -45,7 +47,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @POST("/question/create")
+    @POST("/v1/questions")
     Call<ResponseBody> questionCreate(@Body QuestionCreateRequest questionCreateRequest,
                                       @Header("token") String token);
 
@@ -57,7 +59,7 @@ public interface CircleApi {
      * @param questionAnswerCreateRequest
      * @return
      */
-    @POST("/question/{questionId}/answer/create")
+    @POST("/v1/questions/{questionId}/answers")
     Call<ResponseBody> questionAnswerAdd(@Path("questionId") Long questionId,
                                          @Header("token") String token,
                                          @Body QuestionAnswerCreateRequest questionAnswerCreateRequest);
@@ -71,7 +73,7 @@ public interface CircleApi {
      * @param questionAnswerCommentCreateRequest
      * @return
      */
-    @POST("/question/{questionId}/answer/{answerId}/comment/")
+    @POST("/v1/questions/{questionId}/answers/{answerId}/comments/")
     Call<ResponseBody> questionAnswerCommentAdd(@Path("questionId") Long questionId,
                                                 @Path("answerId") Long answerId,
                                                 @Header("token") String token,
@@ -88,7 +90,7 @@ public interface CircleApi {
      * @param questionAnswerCommentCreateRequest
      * @return
      */
-    @POST("/question/{questionId}/answer/{answerId}/comment/{commentId}/reply")
+    @POST("/v1/questions/{questionId}/answers/{answerId}/comments/{commentId}/replies")
     Call<ResponseBody> questionAnswerCommentAddReply(@Path("questionId") Long questionId,
                                                      @Path("answerId") Long answerId,
                                                      @Path("commentId") Long commentId,
@@ -103,19 +105,33 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/lists")
+    @GET("/v1/questions/")
     Call<ResponseBody> questionTotalList(@Query("page") int page, @Header("token") String token);
 
     /**
      * 总的提问列表
-     * 按点赞、踩排列
      *
      * @param page
      * @param token
      * @return
      */
-    @GET("/question/listsBy")
-    Call<ResponseBody> questionTotalListByUsersCount(@Query("page") int page, @Header("token") String token,@Query("isAgree") boolean isAgree);
+    @GET("/v1/questions/")
+    Call<ResponseBody> questionTotalList(@Query("page") int page,
+                                         @Query("sort") String sort,
+                                         @Header("token") String token);
+
+    /**
+     * 总的提问列表
+     *
+     * @param page
+     * @param token
+     * @return
+     */
+    @GET("/v1/questions/")
+    Call<ResponseBody> questionTotalList(@Query("page") int page,
+                                         @Query("limit") int limit,
+                                         @Query("sort") String sort,
+                                         @Header("token") String token);
 
     /**
      * 点赞问题
@@ -124,7 +140,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/agree")
+    @PUT("/v1/questions/{questionId}/agree")
     Call<ResponseBody> questionAgree(@Path("questionId") Long questionId, @Header("token") String token);
 
     /**
@@ -134,7 +150,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/disagree")
+    @DELETE("/v1/questions/{questionId}/agree")
     Call<ResponseBody> questionDisagree(@Path("questionId") Long questionId, @Header("token") String token);
 
     /**
@@ -145,7 +161,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/answer/{answerId}/agree")
+    @PUT("/v1/questions/{questionId}/answers/{answerId}/agree")
     Call<ResponseBody> answerAgree(@Path("questionId") Long questionId,
                                    @Path("answerId") Long answerId,
                                    @Header("token") String token);
@@ -158,7 +174,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/answer/{answerId}/disagree")
+    @DELETE("/v1/questions/{questionId}/answers/{answerId}/agree")
     Call<ResponseBody> answerDisagree(@Path("questionId") Long questionId,
                                       @Path("answerId") Long answerId,
                                       @Header("token") String token);
@@ -173,7 +189,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/answer/{answerId}/comment/{commentId}/agree")
+    @PUT("/v1/questions/{questionId}/answers/{answerId}/comments/{commentId}/agree")
     Call<ResponseBody> commentAgree(@Path("questionId") Long questionId,
                                     @Path("answerId") Long answerId,
                                     @Path("commentId") Long commentId,
@@ -188,7 +204,7 @@ public interface CircleApi {
      * @param token
      * @return
      */
-    @GET("/question/{questionId}/answer/{answerId}/comment/{commentId}/disagree")
+    @DELETE("/v1/questions/{questionId}/answers/{answerId}/comments/{commentId}/agree")
     Call<ResponseBody> commentDisagree(@Path("questionId") Long questionId,
                                     @Path("answerId") Long answerId,
                                     @Path("commentId") Long commentId,

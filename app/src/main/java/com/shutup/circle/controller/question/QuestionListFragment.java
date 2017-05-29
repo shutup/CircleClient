@@ -181,9 +181,9 @@ public class QuestionListFragment extends BaseFragment implements Constants{
         if (currentType == QUESTION_ORDER_BY_TIME) {
             call = getCircleApi().questionTotalList(page,loginUserResponse.getToken());
         }else if (currentType == QUESTION_ORDER_BY_AGREEDUSERS) {
-            call = getCircleApi().questionTotalListByUsersCount(page,loginUserResponse.getToken(),true);
+            call = getCircleApi().questionTotalList(page,QUESTION_ORDER_BY_AGREEUSERS,loginUserResponse.getToken());
         }else if (currentType == QUESTION_ORDER_BY_DISAGREEDUSERS) {
-            call = getCircleApi().questionTotalListByUsersCount(page,loginUserResponse.getToken(),false);
+            call = getCircleApi().questionTotalList(page,QUESTION_ORDER_BY_DISAGREEUSERS,loginUserResponse.getToken());
         }
         if (null == call)
             return;
